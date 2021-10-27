@@ -14,6 +14,7 @@ import {
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { Control, LocalForm, Errors } from 'react-redux-form';
+import { Loading } from './LoadingComponent';
 
 function RenderCampsite({ campsite }) {
   return (
@@ -28,7 +29,7 @@ function RenderCampsite({ campsite }) {
   );
 }
 
-function RenderComments({ comments }) {
+function RenderComments({ comments, addComment, campsiteId }) {
   if (comments) {
     return (
       <div className='col-md-5 m-1'>
@@ -47,7 +48,7 @@ function RenderComments({ comments }) {
             </p>
           );
         })}
-        <CommentForm />
+        <CommentForm campsiteId={campsiteId} addComment={addComment} />
       </div>
     );
   }
@@ -78,8 +79,13 @@ class CommentForm extends Component {
   }
 
   handleSubmit(values) {
-    console.log('Current state is: ' + JSON.stringify(values));
-    alert('Current state is: ' + JSON.stringify(values));
+    this.toggleModal();
+    this.props.addComment(
+      this.props.campsiteId,
+      values.rating,
+      values.author,
+      values.text
+    );
   }
 
   render() {
@@ -154,7 +160,27 @@ class CommentForm extends Component {
   }
 }
 
-function CampsiteInfo({ campsite, comments }) {
+function CampsiteInfo({ campsite, comments, addComment, isLoading, errMess }) {
+  if (isLoading) {
+    return (
+      <div className='container'>
+        <div className='row'>
+          <Loading />
+        </div>
+      </div>
+    );
+  }
+  if (errMess) {
+    return (
+      <div className='container'>
+        <div className='row'>
+          <div className='col'>
+            <h4>{errMess}</h4>
+          </div>
+        </div>
+      </div>
+    );
+  }
   if (campsite) {
     return (
       <div className='container'>
@@ -172,7 +198,11 @@ function CampsiteInfo({ campsite, comments }) {
         </div>
         <div className='row'>
           <RenderCampsite campsite={campsite} />
-          <RenderComments comments={comments} />
+          <RenderComments
+            comments={comments}
+            addComment={addComment}
+            campsiteId={campsite.id}
+          />
         </div>
       </div>
     );
