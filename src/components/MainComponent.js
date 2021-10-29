@@ -37,7 +37,7 @@ const mapDispatchToProps = {
 class Main extends Component {
   componentDidMount() {
     this.props.fetchCampsites();
-    this.props.fetchCampsites();
+    this.props.fetchComments();
     this.props.fetchPromotions();
   }
   render() {
