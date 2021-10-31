@@ -33,7 +33,9 @@ const Home = ({
   campsitesLoading,
   campsitesErrMess,
   promotionLoading,
-  promotionErrMess
+  promotionErrMess,
+  partnerLoading,
+  partnerErrMess
 }) => {
   return (
     <div className='container'>
@@ -53,7 +55,11 @@ const Home = ({
           />
         </div>
         <div className='col-md m-1'>
-          <RenderCard item={partner} />
+          <RenderCard
+            item={partner}
+            isLoading={partnerLoading}
+            errMess={partnerErrMess}
+          />
         </div>
       </div>
     </div>
